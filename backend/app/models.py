@@ -1,6 +1,7 @@
 from sqlmodel import Field, Relationship, SQLModel
 from typing import Literal
 from enum import Enum
+from datetime import datetime
 
 # Shared properties
 # TODO replace email str with EmailStr when sqlmodel supports it
@@ -136,21 +137,33 @@ class Category(SQLModel, table=True):
     id: int = Field(primary_key = True)
     user_id: int = Field(foreign_key = "user.id")
     description: str
-    expense_type_id: int = Field(foreign_key = "expense_type.id")
+    expense_type_id: int = Field(foreign_key = "expensetype.id")
     transactions: list["TransactionBase"] = Relationship(back_populates="category")
+    owner: User | None = Relationship(back_populates="categories")
+    expense_type: ExpenseType | None = Relationship(back_populates="categories")
+    budgets: list["BudgetBase"] = Relationship(back_populates="category")
 
 class TransactionBase(SQLModel, table=True):
     id: int = Field(primary_key = True)
-    user_id = int = Field(foreign_key = "user.id")
+    user_id: int = Field(foreign_key = "user.id")
     amount: float
     description: str
     priority_id: int = Field(foreign_key = "priority.id")
-    transaction_type_id: int = Field(foreign_key = "transaction_type.id")
+    transaction_type_id: int = Field(foreign_key = "transactiontype.id")
     category_id: int = Field(foreign_key = "category.id")
+    owner: User | None = Relationship(back_populates="transactions")
+    priority: Priority | None = Relationship(back_populates="transactions")
+    transaction_type: TransactionType | None = Relationship(back_populates="transactions")
+    category: Category | None = Relationship(back_populates="transactions") 
+    date: datetime
+
 
 class BudgetBase(SQLModel, table=True):
     id: int = Field(primary_key = True)
-    user_id = int = Field(foreign_key = "user.id")
+    user_id: int = Field(foreign_key = "user.id")
     amount: float
     expenses: float
     category_id: int = Field(foreign_key = "category.id")
+    owner: User | None = Relationship(back_populates="budgets")
+    category: Category | None = Relationship(back_populates="budgets")
+
