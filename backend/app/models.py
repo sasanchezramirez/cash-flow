@@ -1,5 +1,6 @@
 from sqlmodel import Field, Relationship, SQLModel
-
+from typing import Literal
+from enum import Enum
 
 # Shared properties
 # TODO replace email str with EmailStr when sqlmodel supports it
@@ -45,6 +46,9 @@ class User(UserBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
     hashed_password: str
     items: list["Item"] = Relationship(back_populates="owner")
+    transactions: list["TransactionBase"] = Relationship(back_populates="owner")
+    budgets: list["BudgetBase"] = Relationship(back_populates="owner")
+    categories: list["Category"] = Relationship(back_populates="owner")
 
 
 # Properties to return via API, id is always required
@@ -111,3 +115,42 @@ class TokenPayload(SQLModel):
 class NewPassword(SQLModel):
     token: str
     new_password: str
+
+
+class Priority(SQLModel, table=True):
+    id: int = Field(primary_key = True)
+    description: str
+    transactions: list["TransactionBase"] = Relationship(back_populates="priority")
+
+class TransactionType(SQLModel, table=True):
+    id: int = Field(primary_key = True)
+    description: str
+    transactions: list["TransactionBase"] = Relationship(back_populates="transaction_type")
+
+class ExpenseType(SQLModel, table=True):
+    id: int = Field(primary_key = True)
+    description: str
+    categories: list["Category"] = Relationship(back_populates="expense_type")
+
+class Category(SQLModel, table=True):
+    id: int = Field(primary_key = True)
+    user_id: int = Field(foreign_key = "user.id")
+    description: str
+    expense_type_id: int = Field(foreign_key = "expense_type.id")
+    transactions: list["TransactionBase"] = Relationship(back_populates="category")
+
+class TransactionBase(SQLModel, table=True):
+    id: int = Field(primary_key = True)
+    user_id = int = Field(foreign_key = "user.id")
+    amount: float
+    description: str
+    priority_id: int = Field(foreign_key = "priority.id")
+    transaction_type_id: int = Field(foreign_key = "transaction_type.id")
+    category_id: int = Field(foreign_key = "category.id")
+
+class BudgetBase(SQLModel, table=True):
+    id: int = Field(primary_key = True)
+    user_id = int = Field(foreign_key = "user.id")
+    amount: float
+    expenses: float
+    category_id: int = Field(foreign_key = "category.id")
