@@ -52,9 +52,9 @@ function Items() {
               textAlign={{ base: 'center', md: 'left' }}
               pt={12}
             >
-              Items Management
+              Expenses Management
             </Heading>
-            <Navbar type={'Item'} />
+            <Navbar type={'Expense'} />
             <TableContainer>
               <Table size={{ base: 'sm', md: 'md' }}>
                 <Thead>

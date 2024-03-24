@@ -15,7 +15,7 @@ const theme = extendTheme({
       danger: '#E53E3E',
       white: '#FFFFFF',
       dark: '#1A202C',
-      darkSlate: '#252D3D',
+      darkSlate: '#2A4365',
     },
   },
   components: {

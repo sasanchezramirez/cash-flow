@@ -21,7 +21,7 @@ import {
 } from '@tanstack/react-router'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
-import Logo from '../assets/images/fastapi-logo.svg'
+import Logo from '../assets/images/cash-flow.png'
 import { ApiError } from '../client'
 import { Body_login_login_access_token as AccessToken } from '../client/models/Body_login_login_access_token'
 import useAuth, { isLoggedIn } from '../hooks/useAuth'
@@ -123,11 +123,11 @@ function Login() {
           {error && <FormErrorMessage>{error}</FormErrorMessage>}
         </FormControl>
         <Center>
-          <Link as={RouterLink} to="/recover-password" color="blue.500">
+          <Link as={RouterLink} to="/recover-password" color="blue.800">
             Forgot password?
           </Link>
         </Center>
-        <Button variant="primary" type="submit" isLoading={isSubmitting}>
+        <Button variant="primary" type="submit" isLoading={isSubmitting} bgColor={"blue.800"}>
           Log In
         </Button>
       </Container>
